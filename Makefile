@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-TARG=colors
+TARG=github.com/wsxiaoys/colors
 GOFILES=\
 	colors.go\
 
