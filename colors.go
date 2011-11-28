@@ -168,3 +168,17 @@ func Printf(format string, a ...interface{}) (int, error) {
 	format = compile(format)
 	return fmt.Printf(format, a...)
 }
+
+// Similar to fmt.Sprint, will reset the color at the end.
+func Sprint(a ...interface{}) string {
+        a = append(a, resetChar)
+        compileValues(&a)
+        return fmt.Sprint(a...)
+}
+
+// Similar to fmt.Sprintf, will reset the color at the end.
+func Sprintf(format string, a ...interface{}) string {
+        format += resetChar
+        format = compile(format)
+        return fmt.Sprintf(format, a...)
+}
