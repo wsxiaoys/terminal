@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"os"
 )
 
 // Escape character for color syntax
@@ -149,21 +150,21 @@ func compileValues(a *[]interface{}) {
 }
 
 // Similar to fmt.Print, will reset the color at the end.
-func Print(a ...interface{}) (int, error) {
+func Print(a ...interface{}) (int, os.Error) {
 	a = append(a, resetChar)
 	compileValues(&a)
 	return fmt.Print(a...)
 }
 
 // Similar to fmt.Println, will reset the color at the end.
-func Println(a ...interface{}) (int, error) {
+func Println(a ...interface{}) (int, os.Error) {
 	a = append(a, resetChar)
 	compileValues(&a)
 	return fmt.Println(a...)
 }
 
 // Similar to fmt.Printf, will reset the color at the end.
-func Printf(format string, a ...interface{}) (int, error) {
+func Printf(format string, a ...interface{}) (int, os.Error) {
 	format += resetChar
 	format = compile(format)
 	return fmt.Printf(format, a...)
@@ -171,14 +172,14 @@ func Printf(format string, a ...interface{}) (int, error) {
 
 // Similar to fmt.Sprint, will reset the color at the end.
 func Sprint(a ...interface{}) string {
-        a = append(a, resetChar)
-        compileValues(&a)
-        return fmt.Sprint(a...)
+	a = append(a, resetChar)
+	compileValues(&a)
+	return fmt.Sprint(a...)
 }
 
 // Similar to fmt.Sprintf, will reset the color at the end.
 func Sprintf(format string, a ...interface{}) string {
-        format += resetChar
-        format = compile(format)
-        return fmt.Sprintf(format, a...)
+	format += resetChar
+	format = compile(format)
+	return fmt.Sprintf(format, a...)
 }
