@@ -1,35 +1,43 @@
 // The colors package provide a simple way to bring colorful charcaters to terminal interface.
 //
 // This example will output the text with a Blue foreground and a Black background
-//      colors.Println("@{bK}Example Text")
+//      color.Println("@{bK}Example Text")
 //
 // This one will output the text with a red foreground
-//      colors.Println("@rExample Text")
+//      color.Println("@rExample Text")
 //
 // This one will escape the @
-//      colors.Println("@@")
+//      color.Println("@@")
 //
 // Full color syntax code
 //      @{rgbcmykwRGBCMYKW}  foreground/background color
+// 				r/R				Red
+// 				g/G 			Green
+// 				b/B 			Blue
+// 				c/C 			Cyan
+// 				m/M 			Magenta
+// 				y/Y 			Yellow
+// 				k/K 			Black
+// 				w/W 			White
 //      @{|}  Reset format style
-//      @{!./_} Bold / Dim / Italic / underline
+//      @{!./_} Bold / Dim / Italic / Underline
 //      @{^&} Blink / Fast blink
 //      @{?} Reverse the foreground and background color
 //      @{-} Hide the text
 // Note some of the functions are not widely supported, like "Fast blink" and "Italic".
-package colors
+package color
 
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"log"
 )
 
-// Escape character for color syntax
-const escapeChar = '@'
-
-// Short for reset to default style
-var resetChar = fmt.Sprintf("%c|", escapeChar)
+const (
+	EscapeChar = '@'       // Escape character for color syntax
+	ResetCode  = "\033[0m" // Short for reset to default style
+)
 
 // Mapping from character to concrete escape code.
 var codeMap = map[int]int{
@@ -65,7 +73,7 @@ var codeMap = map[int]int{
 }
 
 // Compile color syntax string like "rG" to escape code.
-func colorMap(x string) string {
+func Colorize(x string) string {
 	attr := 0
 	fg := 39
 	bg := 49
@@ -96,7 +104,7 @@ func compileColorSyntax(input, output *bytes.Buffer) {
 
 	switch i {
 	default:
-		output.WriteString(colorMap(string(i)))
+		output.WriteString(Colorize(string(i)))
 	case '{':
 		color := bytes.NewBufferString("")
 		for {
@@ -109,9 +117,9 @@ func compileColorSyntax(input, output *bytes.Buffer) {
 			}
 			color.WriteRune(i)
 		}
-		output.WriteString(colorMap(color.String()))
-	case escapeChar:
-		output.WriteRune(escapeChar)
+		output.WriteString(Colorize(color.String()))
+	case EscapeChar:
+		output.WriteRune(EscapeChar)
 	}
 }
 
@@ -132,7 +140,7 @@ func compile(x string) string {
 		switch i {
 		default:
 			output.WriteRune(i)
-		case escapeChar:
+		case EscapeChar:
 			compileColorSyntax(input, output)
 		}
 	}
@@ -150,35 +158,56 @@ func compileValues(a *[]interface{}) {
 
 // Similar to fmt.Print, will reset the color at the end.
 func Print(a ...interface{}) (int, error) {
-	a = append(a, resetChar)
+	a = append(a, ResetCode)
 	compileValues(&a)
 	return fmt.Print(a...)
 }
 
 // Similar to fmt.Println, will reset the color at the end.
 func Println(a ...interface{}) (int, error) {
-	a = append(a, resetChar)
+	a = append(a, ResetCode)
 	compileValues(&a)
 	return fmt.Println(a...)
 }
 
 // Similar to fmt.Printf, will reset the color at the end.
 func Printf(format string, a ...interface{}) (int, error) {
-	format += resetChar
+	format += ResetCode
 	format = compile(format)
 	return fmt.Printf(format, a...)
 }
 
+// Similar to fmt.Fprint, will reset the color at the end.
+func Fprint(w io.Writer, a ...interface{}) (int, error) {
+	a = append(a, ResetCode)
+	compileValues(&a)
+	return fmt.Fprint(w, a...)
+}
+
+// Similar to fmt.Fprintln, will reset the color at the end.
+func Fprintln(w io.Writer, a ...interface{}) (int, error) {
+	a = append(a, ResetCode)
+	compileValues(&a)
+	return fmt.Fprintln(w, a...)
+}
+
+// Similar to fmt.Fprintf, will reset the color at the end.
+func Fprintf(w io.Writer, format string, a ...interface{}) (int, error) {
+	format += ResetCode
+	format = compile(format)
+	return fmt.Fprintf(w, format, a...)
+}
+
 // Similar to fmt.Sprint, will reset the color at the end.
 func Sprint(a ...interface{}) string {
-	a = append(a, resetChar)
+	a = append(a, ResetCode)
 	compileValues(&a)
 	return fmt.Sprint(a...)
 }
 
 // Similar to fmt.Sprintf, will reset the color at the end.
 func Sprintf(format string, a ...interface{}) string {
-	format += resetChar
+	format += ResetCode
 	format = compile(format)
 	return fmt.Sprintf(format, a...)
 }
