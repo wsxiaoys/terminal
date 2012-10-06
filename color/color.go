@@ -11,14 +11,14 @@
 //
 // Full color syntax code
 //      @{rgbcmykwRGBCMYKW}  foreground/background color
-// 				r/R				Red
-// 				g/G 			Green
-// 				b/B 			Blue
-// 				c/C 			Cyan
-// 				m/M 			Magenta
-// 				y/Y 			Yellow
-// 				k/K 			Black
-// 				w/W 			White
+//        r/R:  Red
+//        g/G:  Green
+//        b/B:  Blue
+//        c/C:  Cyan
+//        m/M:  Magenta
+//        y/Y:  Yellow
+//        k/K:  Black
+//        w/W:  White
 //      @{|}  Reset format style
 //      @{!./_} Bold / Dim / Italic / Underline
 //      @{^&} Blink / Fast blink
