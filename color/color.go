@@ -82,7 +82,7 @@ func Colorize(x string) string {
 		c, ok := codeMap[int(key)]
 		switch {
 		case !ok:
-			log.Fatalf("Wrong color syntax: %c", key)
+			log.Printf("Wrong color syntax: %c", key)
 		case 0 <= c && c <= 8:
 			attr = c
 		case 30 <= c && c <= 37:
@@ -99,7 +99,8 @@ func compileColorSyntax(input, output *bytes.Buffer) {
 	i, _, err := input.ReadRune()
 	if err != nil {
 		// EOF got
-		log.Fatal("Parse failed on color syntax")
+		log.Print("Parse failed on color syntax")
+		return
 	}
 
 	switch i {
@@ -110,7 +111,8 @@ func compileColorSyntax(input, output *bytes.Buffer) {
 		for {
 			i, _, err := input.ReadRune()
 			if err != nil {
-				log.Fatal("Parse failed on color syntax")
+				log.Print("Parse failed on color syntax")
+				break
 			}
 			if i == '}' {
 				break
