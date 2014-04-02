@@ -213,3 +213,8 @@ func Sprintf(format string, a ...interface{}) string {
 	format = compile(format)
 	return fmt.Sprintf(format, a...)
 }
+
+// Similar to fmt.Errorf, will reset the color at the end.
+func Errorf(format string, a ...interface{}) error {
+	return errors.New(Sprintf(format, a...))
+}
