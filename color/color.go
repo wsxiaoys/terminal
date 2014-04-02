@@ -29,6 +29,7 @@ package color
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"log"
