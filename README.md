@@ -21,4 +21,4 @@ func main() {
   color.Print("@rHello world")
 }
 ```
-Check the godoc result for more details.
+Check the [godoc result](https://godoc.org/github.com/wsxiaoys/terminal) for more details.
