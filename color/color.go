@@ -33,6 +33,8 @@ import (
 	"fmt"
 	"io"
 	"log"
+
+	"github.com/mattn/go-colorable"
 )
 
 const (
@@ -72,6 +74,11 @@ var codeMap = map[int]int{
 	'W': 47,
 	'D': 49,
 }
+
+var (
+	Stdout = colorable.NewColorableStdout()
+	Stderr = colorable.NewColorableStderr()
+)
 
 // Compile color syntax string like "rG" to escape code.
 func Colorize(x string) string {
@@ -163,21 +170,21 @@ func compileValues(a *[]interface{}) {
 func Print(a ...interface{}) (int, error) {
 	a = append(a, ResetCode)
 	compileValues(&a)
-	return fmt.Print(a...)
+	return fmt.Fprint(Stdout, a...)
 }
 
 // Similar to fmt.Println, will reset the color at the end.
 func Println(a ...interface{}) (int, error) {
 	a = append(a, ResetCode)
 	compileValues(&a)
-	return fmt.Println(a...)
+	return fmt.Fprintln(Stdout, a...)
 }
 
 // Similar to fmt.Printf, will reset the color at the end.
 func Printf(format string, a ...interface{}) (int, error) {
 	format += ResetCode
 	format = compile(format)
-	return fmt.Printf(format, a...)
+	return fmt.Fprintf(Stdout, format, a...)
 }
 
 // Similar to fmt.Fprint, will reset the color at the end.
