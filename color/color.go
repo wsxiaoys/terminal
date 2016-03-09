@@ -1,4 +1,4 @@
-// The colors package provide a simple way to bring colorful charcaters to terminal interface.
+// The colors package provide a simple way to bring colorful characters to terminal interface.
 //
 // This example will output the text with a Blue foreground and a Black background
 //      color.Println("@{bK}Example Text")
