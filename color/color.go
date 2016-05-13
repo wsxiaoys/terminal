@@ -22,6 +22,7 @@
 //      @{|}  Reset format style
 //      @{!./_} Bold / Dim / Italic / Underline
 //      @{^&} Blink / Fast blink
+//      @{*} High intensity foreground color
 //      @{?} Reverse the foreground and background color
 //      @{-} Hide the text
 // Note some of the functions are not widely supported, like "Fast blink" and "Italic".
@@ -51,6 +52,7 @@ var codeMap = map[int]int{
 	'&': 6,
 	'?': 7,
 	'-': 8,
+	'*': 60,
 
 	'k': 30,
 	'r': 31,
@@ -90,6 +92,8 @@ func Colorize(x string) string {
 			fg = c
 		case 40 <= c && c <= 47:
 			bg = c
+		case c == 60:
+			fg += c
 		}
 	}
 	return fmt.Sprintf("\033[%d;%d;%dm", attr, fg, bg)
