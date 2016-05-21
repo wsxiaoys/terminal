@@ -2,10 +2,10 @@ package terminal
 
 import (
 	"fmt"
-	"github.com/wsxiaoys/terminal/color"
 	"io"
 	"log"
-	"os"
+
+	"github.com/wsxiaoys/terminal/color"
 )
 
 type TerminalWriter struct {
@@ -13,8 +13,8 @@ type TerminalWriter struct {
 }
 
 var (
-	Stdout = &TerminalWriter{os.Stdout}
-	Stderr = &TerminalWriter{os.Stderr}
+	Stdout = &TerminalWriter{color.Stdout}
+	Stderr = &TerminalWriter{color.Stderr}
 )
 
 func (w *TerminalWriter) checkOutput(s string) {
